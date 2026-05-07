@@ -1,121 +1,215 @@
-# Taiwan Maritime Pulse
+# Taiwan Strait Intelligence Dashboard
 
-Real-time maritime intelligence dashboard for the Taiwan Strait.
+**Open-source, browser-based situational awareness for the Taiwan Strait.**
 
-AIS vessel tracking · ADS-B air picture · ADIZ monitoring · submarine cable infrastructure
+Real-time AIS vessel tracking · Live ADS-B air picture · PLA OSINT installations · ADIZ monitoring · Critical infrastructure overlay
 
-## What it shows
+> Built by people who care about Taiwan's future. No government affiliation. All data from open sources.
 
-| Layer | Source | Rendering |
+---
+
+## Why this exists
+
+Taiwan sits at one of the most consequential chokepoints on Earth. Understanding what moves through the Strait — ships, aircraft, missiles, data — is no longer just for analysts. It should be open, legible, and free.
+
+This dashboard is a public intelligence layer. Every data point is sourced from open channels: AIS broadcasts, ADS-B transponders, DoD reports, CSIS China Power, OSINT satellite imagery. Nothing here is classified. Everything here should be known.
+
+If you're a developer, GIS engineer, security researcher, or just someone who wants Taiwan to remain free — you're in the right place. **PRs welcome.**
+
+---
+
+## Live layers
+
+| Layer | Source | Update cadence |
 |---|---|---|
-| AIS vessels | Supabase `get_ship_trails` | Three.js InstancedMesh + trails |
-| ADS-B aircraft | OpenSky Network (30s refresh) | Mapbox GL circles |
-| ADIZ boundary + median line | Static GeoJSON | Mapbox GL line |
-| PLA incursion events | Static GeoJSON | Mapbox GL circles |
-| EEZ / territorial waters | Static GeoJSON | Mapbox GL fill + line |
-| Port polygons | Static GeoJSON | Mapbox GL fill + glow |
-| Submarine cables | Static GeoJSON | Mapbox GL line (type-colored) |
-| Cable landing stations | Static GeoJSON | Mapbox GL circles |
-| Airports | Static GeoJSON | Mapbox GL fill (context) |
+| AIS vessels (1,000+) | Supabase `get_ship_trails` | Historical trails (prev day) |
+| Live ADS-B aircraft | FR24 Business API → OpenSky fallback | 30s refresh |
+| PLA military installations (30) | DoD CMPR · CSIS China Power · OSINT | Static (curated) |
+| ADIZ boundary + median line | ROCAF published coordinates | Static |
+| PLA incursion events | ROCAF daily briefings | Manual update |
+| EEZ / territorial / contiguous | UNCLOS reference | Static |
+| HSR trains (position interpolated) | THSR timetable | 10s simulation |
+| TRA trains (position interpolated) | TRA timetable | 10s simulation |
+| Port polygons | Static GeoJSON | Static |
+| Submarine cables | TeleGeography OSINT | Static |
+| Cable landing stations | TeleGeography OSINT | Static |
+| Airports | Static GeoJSON | Static |
 
-## Vessel Categories
+### PLA installation coverage
 
-Vessels are colored by AIS `vessel_type` field:
+30 verified OSINT sites across 6 branches — each with per-branch icons, threat-level assessment, and terminal-style hover intel card:
 
-| Category | Color | AIS Codes |
+| Branch | Icon | Installations |
 |---|---|---|
-| Military | Red `#ff4444` | 35 |
-| Coast Guard | Orange `#ff8c00` | 55 |
-| Tanker / LNC | Amber `#ffd700` | 80–89 (petroleum, LNG, chemical) |
-| Cargo | Cyan `#4fc3f7` | 70–79 |
-| Passenger / Cruise | Silver `#e0e0e0` | 60–69 |
-| Fishing | Green `#66bb6a` | 30 |
-| Tug / Work | Purple `#ab47bc` | 52 |
-| Other | Grey `#607d8b` | all else |
+| PLAAF (Air Force) | ✈ | Longtian, Liancheng, Shaowu, Jinjiang, Zhangzhou, Ningbo Lishe, Zhoushan, Wenzhou, Shantou, Huizhou |
+| PLAN (Navy) | ⚓ | Xiamen Naval Base, Fuzhou Mawei, Xiangshan Submarine Base, Zhoushan Naval Base, Shanwei, Ningde |
+| PLARF (Rocket Force) | ↑ | Base 61 (Huangshan), Base 62 (Leping), Dongshan Missile Unit, Zhangpu Coastal Defense |
+| PLAGF (Ground Force) | ⊕ | 73rd Group Army (Xiamen), 72nd Group Army (Huzhou), 71st Group Army (Hefei), Changle Amphibious Staging |
+| Theater HQ | ★ | Eastern Theater Command, Sansha Garrison (Woody Island) |
+| SIGINT / EW | ◎ | Pingtan Island, Dongshan EW, Xiapu Tracking, Fuqing ISR |
 
-Each category can be toggled independently in the sidebar.
+---
 
-## Dev
+## Quick start
 
 ```bash
 npm install
-cp .env.example .env   # set VITE_MAPBOX_TOKEN + VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY
-npm run dev            # http://localhost:3721
-npm run build          # tsc -b + vite build
-npx tsc -b             # type-check only (required before commit)
+cp .env.example .env
+# set VITE_MAPBOX_TOKEN + VITE_SUPABASE_URL + VITE_SUPABASE_ANON_KEY
+npm run dev   # http://localhost:3721
 ```
+
+Optional: add `VITE_FR24_API_TOKEN` for FlightRadar24 Business API (richer ADS-B). Falls back to OpenSky if unset.
+
+---
 
 ## Architecture
 
-### Rendering
+### Rendering — two paths
 
-Two parallel rendering paths:
+**Declarative (static GeoJSON)** — `src/map/overlayRegistry.ts` defines all static layers as config objects. Adding a new overlay: (1) key in `LayerVisibility`, (2) `OverlayConfig` entry, (3) toggle row in `LayerSidebar`. No other wiring needed.
 
-**Declarative (static GeoJSON)** — `src/map/overlayRegistry.ts` defines all static layers as config objects. `overlayManager.ts` handles add/remove/theme-update. Adding a new static overlay requires only: (1) a key in `LayerVisibility`, (2) an `OverlayConfig` entry, (3) a toggle row in `LayerSidebar`.
+**Imperative (dynamic)** — Direct Mapbox source/layer management for data that updates on a timer: ADS-B, HSR, TRA. Hooks (`useOpenSkyLayer`, `useHsrLayer`, `useTraLayer`) own the full lifecycle. Ships render via Three.js `InstancedMesh` + trails in a Mapbox `CustomLayerInterface`.
 
-**Imperative (Three.js)** — `ShipScene.ts` renders vessels as `InstancedMesh` with per-instance color by category + `LineSegments` trails. Wrapped as a Mapbox `CustomLayerInterface` in `customLayer.ts`. The scene reads time from `timeStore.getTime()` directly in the RAF loop — no React re-renders in the hot path.
+### Time
 
-### Time store
+`src/state/timeStore.ts` — singleton outside React. App advances it every 5s in live mode. Dynamic layers subscribe via `subscribeThrottled(ms, cb)`. **Never** put current time in React `useEffect` deps.
 
-`src/state/timeStore.ts` is a singleton outside React. In live mode, `App.tsx` advances it every 5 seconds with `setInterval`. The ship layer reads it synchronously from the Mapbox render callback. No `currentTime` in React deps.
-
-### Loading
-
-All Supabase calls must be wrapped with `withLoading(id, label, rpc(...))` from `src/lib/loadingRegistry.ts`. The `LoadingIndicator` component subscribes via `useSyncExternalStore`.
-
-### Data
-
-Ship tracks come from Supabase `get_ship_trails` RPC → pre-aggregated `realtime.ship_trails_daily` table (pg_cron refresh every 10 min). The hook `useShipData` loads the most recent available day on mount and caches up to 7 days (LRU).
+### File layout
 
 ```
 src/
-  App.tsx                   # maritime app root
-  types/index.ts            # VesselCategory, LayerVisibility, etc.
-  state/timeStore.ts        # singleton time source (no React)
-  lib/loadingRegistry.ts    # global loading task store
+  App.tsx                   # root — wires all hooks
+  types/index.ts            # LayerVisibility, VesselCategory
+  state/timeStore.ts        # singleton time source
   data/
-    shipLoader.ts           # Supabase RPC + GPS anomaly filter
-    openSkyLoader.ts        # OpenSky ADS-B fetch + GeoJSON builder
-    adizLoader.ts           # ADIZ boundary / median / incursions
+    openSkyLoader.ts        # ADS-B fetch + GeoJSON builder
+    fr24Loader.ts           # FR24 Business API adapter
+    hsrLoader.ts            # THSR schedule interpolation
+    traLoader.ts            # TRA schedule interpolation
+    adizLoader.ts           # ADIZ boundary / incursions
+    shipLoader.ts           # Supabase AIS trails
   hooks/
-    useShipData.ts          # LRU 7-day cache, load + prefetch
-    useOpenSkyLayer.ts      # ADS-B 30s poll + Mapbox layer lifecycle
-    useAdizLayer.ts         # ADIZ boundary + incursion layers
-    useLayerVisibility.ts   # maritime defaults (ships + ADIZ + cables on)
-    useMapInteraction.ts    # feature click → FeatureInfoPanel
+    useOpenSkyLayer.ts      # ADS-B 30s poll
+    useAdizLayer.ts         # ADIZ + median line layers
+    useHsrLayer.ts          # HSR position update loop
+    useTraLayer.ts          # TRA position update loop
+    usePlaPopup.ts          # hover intel card for PLA bases
+    useShipData.ts          # LRU 7-day AIS cache
   map/
-    MapView.tsx             # Mapbox init + overlay lifecycle
-    overlayRegistry.ts      # declarative static layer configs
-    overlayManager.ts       # add / update / show/hide overlays
-    customLayer.ts          # Mapbox CustomLayer wrapping ShipScene
-    cameraPresets.ts        # strait / port / scene presets
+    overlayRegistry.ts      # all declarative overlay configs
+    overlayManager.ts       # add / update / show / hide
+    customLayer.ts          # Three.js → Mapbox CustomLayer
   three/
-    ShipScene.ts            # InstancedMesh (per-category color) + trails
-  components/
-    LayerSidebar.tsx        # vessel category toggles + live counts
-    FeatureInfoPanel.tsx    # click-to-inspect for cables, ports, zones
-    StyleSelector.tsx       # 6 Mapbox styles
-    LoadingIndicator.tsx    # global loading HUD
-    LoadingScreen.tsx       # initial load screen
-    InfoModal.tsx           # about / data sources
+    ShipScene.ts            # InstancedMesh + trails
 public/geo/
+  pla_bases.geojson         # 30 PLA OSINT installations
   adiz_boundary.geojson     # Taiwan ADIZ perimeter
   adiz_median_line.geojson  # Taiwan Strait median line
-  adiz_incursions.geojson   # PLA incursion event points
-  maritime_zones.geojson    # EEZ (200nm) + territorial (12nm) + contiguous (24nm)
-  port_polygons.geojson     # major port boundaries
-  submarine_cables.geojson  # cable routes (type-colored)
+  adiz_incursions.geojson   # PLA crossing event log
+  maritime_zones.geojson    # EEZ + territorial + contiguous
+  submarine_cables.geojson  # cable routes by type
   landing_stations.geojson  # cable landing points
-  airports.geojson          # airports (context layer)
+  hsr_track.geojson         # THSR track geometry
+  tra_track.geojson         # TRA Western Trunk + East Coast
 ```
 
-## Related repos
+---
 
-| Repo | Path | Role |
-|---|---|---|
-| gis-platform | `../gis-platform` | Supabase migrations + `get_ship_trails` RPC |
-| data-collectors | `../data-collectors` | AIS collector + pg_cron SQL templates |
+## Contributing
+
+**This project exists because Taiwan's security deserves open-source attention. Every PR matters.**
+
+### What we need
+
+The clearest ways to help — roughly in priority order:
+
+| Area | What's needed |
+|---|---|
+| **PLA data** | More OSINT installations — additional PLARF brigades, PLAN bases in Guangdong/Hainan, new PLAAF expansion sites |
+| **Live AIS** | Integration with MarineTraffic / VT Explorer AIS stream (paid API) for real-time vessel positions |
+| **ADIZ incursions** | Automated parser for ROCAF daily briefings to keep `adiz_incursions.geojson` current |
+| **GeoJSON quality** | Better port polygons, updated cable routes, airport boundary accuracy |
+| **Mobile** | Responsive layout for the sidebar and info panels |
+| **Accessibility** | Color-blind friendly palette option for vessel categories |
+| **Performance** | Ship trail LOD — reduce Three.js geometry at zoom < 6 |
+
+### Ground rules
+
+1. **OSINT only.** All data must be sourced from public, unclassified material. DoD CMPR, CSIS China Power, commercial satellite imagery analysis, government press releases, official flight tracking. If you can't cite it, don't add it.
+
+2. **No speculation.** If a PLA base location is approximate, say so in the `notes` field. Wrong coordinates are worse than no coordinates.
+
+3. **Accuracy over drama.** Threat levels and labels should reflect open-source assessments, not political temperature. The map speaks for itself.
+
+4. **One feature, one PR.** Keep changes focused so reviewers can evaluate data quality independently from code quality.
+
+5. **TypeScript strict.** Run `npx tsc -b` before opening a PR. Zero type errors required.
+
+6. **Attribution.** If you add a GeoJSON feature, include the source in the `notes` property or your PR description.
+
+### Adding a PLA installation
+
+Edit `public/geo/pla_bases.geojson`. Each feature needs:
+
+```json
+{
+  "type": "Feature",
+  "geometry": { "type": "Point", "coordinates": [LNG, LAT] },
+  "properties": {
+    "type": "PLAAF | PLAN | PLARF | PLAGF | HQ | RADAR",
+    "name_en": "English name",
+    "name_zh": "中文名稱",
+    "unit": "PLA unit designation",
+    "dist_km": 350,
+    "notes": "Capability notes. Source: DoD CMPR 2023 / CSIS China Power."
+  }
+}
+```
+
+### Adding a new map layer
+
+Follow the enforced order in `CLAUDE.md` (rule #5):
+1. `src/types/index.ts` — add key to `LayerVisibility`
+2. `src/data/xxxLoader.ts` — data fetcher
+3. `src/hooks/useXxxLayer.ts` — layer lifecycle hook
+4. `src/map/overlayRegistry.ts` or custom layer file
+5. `src/components/LayerSidebar.tsx` — toggle + `LAYER_COLORS` entry
+6. `src/App.tsx` — wire the hook
+7. `src/hooks/useLayerVisibility.ts` — set default visibility
+
+Or use the scaffold command: `/new-layer <name>` in Claude Code.
+
+---
 
 ## Tech stack
 
-React 19 · TypeScript · Vite · Mapbox GL JS v3 · Three.js r172 · Supabase · OpenSky Network
+React 19 · TypeScript · Vite · Mapbox GL JS v3 · Three.js r172 · Supabase · OpenSky Network · FR24 Business API
+
+---
+
+## Related repos
+
+| Repo | Role |
+|---|---|
+| `gis-platform` | Supabase migrations, `get_ship_trails` RPC, pg_cron jobs |
+| `data-collectors` | AIS + IoT collector scripts, SQL pre-aggregate templates |
+
+---
+
+## Data sources
+
+| Dataset | Source |
+|---|---|
+| PLA installations | DoD China Military Power Report · CSIS China Power Project · OSINT |
+| ADIZ boundary | ROCAF official coordinates |
+| PLA incursions | ROCAF daily air defense briefings |
+| AIS vessel tracks | Collected via open AIS feed → Supabase |
+| ADS-B flights | OpenSky Network (open) / FlightRadar24 (commercial) |
+| Maritime zones | UNCLOS reference boundaries |
+| Submarine cables | TeleGeography (public data) |
+| Rail schedules | THSR / TRA published timetables |
+
+---
+
+*台灣加油。* 🇹🇼
