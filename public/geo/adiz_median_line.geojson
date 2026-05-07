@@ -1,0 +1,22 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Taiwan Strait Median Line",
+        "name_zh": "台灣海峽中線",
+        "note": "Informal equidistant line between Taiwan and mainland China. Not officially demarcated; approximate position. PLA aircraft crossing this line is considered an escalatory act."
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [
+          [120.8, 22.0],
+          [120.6, 24.0],
+          [120.5, 26.0],
+          [120.8, 27.5]
+        ]
+      }
+    }
+  ]
+}

@@ -1,4 +1,6 @@
-# Mini Taiwan Pulse — 開發規則
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
 > React 19 + TypeScript + Vite (port 3721) · Mapbox GL + Three.js · Supabase (gis-platform)
 >
@@ -16,6 +18,50 @@
 - 填完後 P0 項目升級到 `lessons.md`、重要 bug 寫成 pitfalls
 - 機制說明：[`.claude/retrospectives/README.md`](./.claude/retrospectives/README.md)
 
+## 開發指令
+
+```bash
+npm run dev        # 啟動 dev server（port 3721）
+npm run build      # tsc -b && vite build
+npm run preview    # 預覽 production build
+npx tsc -b         # TypeScript 驗證（commit 前必跑；禁用 --noEmit）
+
+# 腳本
+npm run gcs:upload        # 上傳靜態資產到 GCS（./geo/*.geojson）
+npm run gcs:upload:ships  # 上傳船隻資料到 GCS
+```
+
+## 架構概覽
+
+### 渲染雙路徑
+
+**宣告式（靜態 GeoJSON）**：`src/map/overlayRegistry.ts` 定義所有靜態圖層設定（GeoJSON source + Mapbox GL paint spec），由 `overlayManager.ts` 統一 add/remove/update。適用於不需要逐幀更新的圖層。
+
+**命令式（動態）**：
+- `src/three/*Scene.ts` — Three.js 場景物件（船 InstancedMesh + trails）
+- `src/map/*CustomLayer.ts` — 包裝成 Mapbox `CustomLayerInterface`，掛進地圖渲染迴圈
+- `src/hooks/use*Layer.ts` — 直接管理 Mapbox GeoJSON source + layer（HSR、TRA、ADS-B、ADIZ）
+
+### overlayParams 布林編碼規則
+`overlayParams` 型別為 `Record<string, number>`，**不接受 boolean**。布林旗標一律用 `0` / `1` 傳遞，命名慣例 `xxxVisible`（例：`metroPillarVisible: 1`）。
+
+### 時間軸
+
+- `src/state/timeStore.ts` — 全域單例，是動態圖層唯一時間來源
+- App.tsx 在 live mode 每 5s 呼叫 `timeStore.setTime(Date.now()/1000)`
+- `src/data/hsrLoader.ts` — THSR 時刻表插值（pure function，schedule-based）
+- `src/data/traLoader.ts` — TRA 時刻表插值（Western Trunk + East Coast，schedule-based）
+
+### 狀態流向
+```
+useTimeline → timeStore.setTime()
+             ↓
+  timeStore.getTime()          ← Three.js RAF loop
+  timeStore.subscribeThrottled ← Mapbox filter / data lookup
+  timeStore.subscribeDate      ← Supabase 跨日載入
+  useSyncExternalStore         ← UI 顯示
+```
+
 ## 必守規則
 
 ### 1. TypeScript 驗證
@@ -32,9 +78,17 @@ Commit 前必跑。
 - 詳見 [`docs/development-rules.md#1-資料來源管理`](./docs/development-rules.md#1-資料來源管理)
 
 ### 3. 資料載入必須有 Loading UI ⚠️
-**所有** Supabase 非同步載入都必須註冊 loading task：
-- 初次載入 / 切換 timeline 日期 / Toggle 圖層
-- Loader 使用 `src/lib/loadingRegistry.ts`，包 `start()` / `complete()`
+**所有** Supabase 非同步載入都必須包裝 loading task：
+
+```typescript
+// RPC 呼叫 → withLoading
+const { data } = await withLoading("task-id", "顯示文字", supabase.rpc(...));
+
+// setData 後延續到地圖渲染完成 → keepLoadingUntilMapIdle
+keepLoadingUntilMapIdle(map, "task-id", "顯示文字", "source-id");
+```
+
+- 初次載入 / 切換 timeline 日期 / Toggle 圖層都要包
 - 範例看 `src/data/freewayLoader.ts` + `src/hooks/useFreewayLayer.ts`
 - 禁止靜默 `supabase.rpc().then()`
 
@@ -81,6 +135,7 @@ Hook 參數表**不收** `currentTime`。理由與節流表見 [`docs/developmen
 |---|---|
 | Supabase fetcher | `src/data/*Loader.ts` |
 | Layer hook | `src/hooks/use*Layer.ts` |
+| HSR 時刻表插值 | `src/data/hsrLoader.ts` |
 | Three.js scene | `src/three/*Scene.ts` |
 | Custom WebGL layer | `src/map/*CustomLayer.ts` |
 | 靜態 GeoJSON | `public/` (扁平) |
@@ -93,10 +148,25 @@ Hook 參數表**不收** `currentTime`。理由與節流表見 [`docs/developmen
 
 | 變數 | 用途 |
 |---|---|
-| `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` | 前端 |
+| `VITE_MAPBOX_TOKEN` | Mapbox GL 地圖 |
+| `VITE_SUPABASE_URL` / `VITE_SUPABASE_ANON_KEY` | 前端 Supabase |
+| `VITE_FR24_API_TOKEN` | FlightRadar24 Business API（選用；未設則用 OpenSky 免費版） |
 | `SUPABASE_SERVICE_ROLE_KEY` | 腳本（禁止進 bundle） |
 | `SUPABASE_DB_URL` | psql 直連 |
 | `VITE_DATA_SOURCE=supabase` | 啟用 Supabase（否則用 Pulse API） |
+
+## 資料來源現狀
+
+| 圖層 | 資料來源 | 即時性 |
+|---|---|---|
+| 船舶（AIS） | Supabase `get_ship_trails` | 歷史軌跡（前一天），非即時 |
+| 飛機（ADS-B） | FR24 Business API → 退回 OpenSky | 30s refresh |
+| HSR 高鐵 | 內嵌時刻表插值（`hsrLoader.ts`） | 10s 模擬 |
+| TRA 台鐵 | 內嵌時刻表插值（`traLoader.ts`） | 10s 模擬（自強/普悠瑪 主線） |
+| ADIZ | 靜態 GeoJSON + 事件紀錄 | 靜態 |
+| 潛艦纜線 / 港口 / 海域 | 靜態 GeoJSON | 靜態 |
+
+**如需即時船舶位置**：需 MarineTraffic / VT Explorer AIS Stream API（付費訂閱），目前未接。
 
 ## 參考文件
 
@@ -104,7 +174,6 @@ Hook 參數表**不收** `currentTime`。理由與節流表見 [`docs/developmen
 - [`docs/supabase-optimization.md`](./docs/supabase-optimization.md) — Pre-aggregate pattern 完整指南
 - [`docs/supabase_rpc_audit.md`](./docs/supabase_rpc_audit.md) — RPC 效能盤點
 - [`docs/TIMELINE_ARCHITECTURE.md`](./docs/TIMELINE_ARCHITECTURE.md) — 時間軸架構
-- [`docs/bus-layer-design.md`](./docs/bus-layer-design.md) — 公車 progress-based 架構 + 全台擴展指南
 - [`docs/known-issues.md`](./docs/known-issues.md) — 歷史 bug + 診斷指令
 - [`docs/research/`](./docs/research/) — 研究報告區（決策軌跡、跨系統比對、故事 cookbook）
 
@@ -115,4 +184,3 @@ Hook 參數表**不收** `currentTime`。理由與節流表見 [`docs/developmen
 | gis-platform | `../gis-platform` | Supabase migrations |
 | data-collectors | `../data-collectors` | 資料收集 + SQL 範本 |
 | pulse-api | `../pulse-api` | FastAPI 備援 |
-| mini-taipei-v3 | `../mini-taipei-v3` | 鐵道資料來源 |

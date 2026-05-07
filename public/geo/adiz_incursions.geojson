@@ -1,0 +1,85 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "date": "2022-08-04",
+        "aircraft_count": 68,
+        "aircraft_types": "H-6K bomber, Su-30, J-11, J-16, Y-8 ELINT, KJ-500 AEW",
+        "event": "Response to Speaker Pelosi visit to Taiwan",
+        "description": "PLA launched ballistic missiles and conducted air exercises encircling Taiwan. Largest drills in decades.",
+        "source": "Taiwan Ministry of National Defense",
+        "source_url": "https://www.mnd.gov.tw/english/"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [122.5, 23.8]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "date": "2023-04-08",
+        "aircraft_count": 71,
+        "aircraft_types": "J-16, Su-30, H-6K, KJ-500, Y-8 ASW",
+        "event": "Joint Sword Exercise Day 1 — response to Tsai-McCarthy meeting",
+        "description": "71 PLA aircraft detected around Taiwan ADIZ. 45 crossed the median line. Large coordinated exercise in multiple zones.",
+        "source": "Taiwan Ministry of National Defense",
+        "source_url": "https://www.mnd.gov.tw/english/"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.8, 24.2]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "date": "2023-04-09",
+        "aircraft_count": 91,
+        "aircraft_types": "J-16, J-10, H-6K, KJ-500, Su-30, Y-8",
+        "event": "Joint Sword Exercise Day 2 — largest single-day incursion at the time",
+        "description": "91 PLA aircraft tracked. 54 crossed ADIZ median line. Exercise zones covered north, south, east, and west of Taiwan.",
+        "source": "Taiwan Ministry of National Defense",
+        "source_url": "https://www.mnd.gov.tw/english/"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [122.0, 23.5]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "date": "2024-05-23",
+        "aircraft_count": 111,
+        "aircraft_types": "J-20, J-16, H-6K, KJ-500, Y-20 tanker, Su-30",
+        "event": "Joint Sword-2024A — response to Lai Ching-te inauguration",
+        "description": "111 PLA aircraft and 9 warships participated in drills surrounding Taiwan. First time J-20 stealth fighters recorded in ADIZ.",
+        "source": "Taiwan Ministry of National Defense",
+        "source_url": "https://www.mnd.gov.tw/english/"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [122.3, 23.0]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "date": "2024-10-14",
+        "aircraft_count": 153,
+        "aircraft_types": "J-16, J-10C, H-6K, KJ-500, Y-8, Su-30, Y-20",
+        "event": "Joint Sword-2024B — response to President Lai's October 10 National Day speech",
+        "description": "153 PLA military aircraft and 11 warships. Largest ever single-exercise incursion. Multiple zones simultaneously active.",
+        "source": "Taiwan Ministry of National Defense",
+        "source_url": "https://www.mnd.gov.tw/english/"
+      },
+      "geometry": {
+        "type": "Point",
+        "coordinates": [121.5, 23.3]
+      }
+    }
+  ]
+}

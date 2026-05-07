@@ -1,0 +1,28 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "name": "Taiwan ADIZ",
+        "name_zh": "台灣防空識別區",
+        "note": "Approximate boundary based on publicly available aviation charts (ICAO AIP ROC). Verify against official Taiwan CAA AIP for precision."
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [120.0, 22.0],
+            [124.5, 22.0],
+            [124.5, 25.5],
+            [122.5, 29.0],
+            [120.5, 29.5],
+            [119.5, 27.5],
+            [119.5, 24.0],
+            [120.0, 22.0]
+          ]
+        ]
+      }
+    }
+  ]
+}

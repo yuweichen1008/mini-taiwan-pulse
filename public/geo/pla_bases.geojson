@@ -1,0 +1,275 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [119.53, 25.44] },
+      "properties": {
+        "type": "PLAAF", "name_en": "Longtian Air Base", "name_zh": "龙田空军基地",
+        "unit": "PLAAF 东部战区", "dist_km": 210,
+        "notes": "Fighter base; J-10C/J-16 capable; forward deployment base for Taiwan contingency"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [116.75, 25.72] },
+      "properties": {
+        "type": "PLAAF", "name_en": "Liancheng Air Base", "name_zh": "连城空军基地",
+        "unit": "PLAAF 东部战区", "dist_km": 340,
+        "notes": "Inland Fujian; mountain-protected dispersal base; hardened shelters observed"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [117.49, 27.28] },
+      "properties": {
+        "type": "PLAAF", "name_en": "Shaowu Air Base", "name_zh": "邵武机场",
+        "unit": "PLAAF 东部战区", "dist_km": 390,
+        "notes": "Mountain-protected reserve base; runway extended 2019-2021"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [118.59, 24.79] },
+      "properties": {
+        "type": "PLAAF", "name_en": "Jinjiang Air Base", "name_zh": "晋江机场",
+        "unit": "PLAAF / 民航共用", "dist_km": 230,
+        "notes": "Dual-use (civilian/military); activated for PLA exercises Aug 2022; ~230km from Taiwan"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [117.73, 24.39] },
+      "properties": {
+        "type": "PLAAF", "name_en": "Zhangzhou Air Base", "name_zh": "漳州空军基地",
+        "unit": "PLAAF 东部战区", "dist_km": 190,
+        "notes": "Coastal Fujian; strike mission capable; ~190km from central Taiwan"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [121.52, 29.82] },
+      "properties": {
+        "type": "PLAAF", "name_en": "Ningbo Lishe Air Base", "name_zh": "宁波栎社机场",
+        "unit": "PLAAF 东部战区", "dist_km": 620,
+        "notes": "Key ISR base; KJ-500 AEW&C, Y-8 ASW operations; dual-use"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [122.12, 30.06] },
+      "properties": {
+        "type": "PLAAF", "name_en": "Zhoushan Air Base", "name_zh": "舟山机场",
+        "unit": "PLAN Aviation", "dist_km": 660,
+        "notes": "PLAN maritime patrol aviation; H-6G anti-ship bomber operations"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [120.85, 28.07] },
+      "properties": {
+        "type": "PLAAF", "name_en": "Wenzhou Air Base", "name_zh": "温州永强机场",
+        "unit": "PLAAF 东部战区", "dist_km": 490,
+        "notes": "Dual-use; fighter staging during exercises; expanded ramp capacity 2020"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [116.76, 23.42] },
+      "properties": {
+        "type": "PLAAF", "name_en": "Shantou Air Base", "name_zh": "汕头外砂机场",
+        "unit": "PLAAF 南部战区", "dist_km": 380,
+        "notes": "Southern flank coverage; Su-30MKK fleet; ~380km from Kaohsiung"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [118.07, 24.46] },
+      "properties": {
+        "type": "PLAN", "name_en": "Xiamen Naval Base", "name_zh": "厦门海军基地",
+        "unit": "PLAN 东海舰队", "dist_km": 200,
+        "notes": "Primary amphibious staging port; landing ships; ~200km from Taiwan; key in invasion planning"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [119.45, 26.01] },
+      "properties": {
+        "type": "PLAN", "name_en": "Fuzhou Mawei Naval Base", "name_zh": "福州马尾基地",
+        "unit": "PLAN 东海舰队", "dist_km": 280,
+        "notes": "Patrol vessels and coast guard coordination; historical significance (Sino-French War 1884)"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [121.88, 29.48] },
+      "properties": {
+        "type": "PLAN", "name_en": "Xiangshan Submarine Base", "name_zh": "宁波象山基地",
+        "unit": "PLAN 东海舰队", "dist_km": 620,
+        "notes": "SSK/SSN submarine base; Type 093 capable piers; tunnel-protected bays"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [122.08, 29.97] },
+      "properties": {
+        "type": "PLAN", "name_en": "Zhoushan Naval Base", "name_zh": "舟山定海基地",
+        "unit": "PLAN 东海舰队", "dist_km": 660,
+        "notes": "East Sea Fleet surface combatants; Type 052D destroyers; Carrier ops support"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [115.37, 22.78] },
+      "properties": {
+        "type": "PLAN", "name_en": "Shanwei Naval Base", "name_zh": "汕尾海军基地",
+        "unit": "PLAN 南部战区", "dist_km": 460,
+        "notes": "Southern flank PLAN presence; patrol craft and mine-laying capability"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [118.34, 29.73] },
+      "properties": {
+        "type": "PLARF", "name_en": "PLARF Base 61 (Huangshan)", "name_zh": "火箭军第61基地",
+        "unit": "中国人民解放军火箭军", "dist_km": 590,
+        "notes": "DF-11A/DF-16 SRBM; DF-17 hypersonic glide vehicle reported; full Taiwan strait coverage"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [117.13, 28.97] },
+      "properties": {
+        "type": "PLARF", "name_en": "PLARF Base 62 (Leping)", "name_zh": "火箭军第62基地",
+        "unit": "中国人民解放军火箭军", "dist_km": 520,
+        "notes": "DF-21D ASBM (carrier-killer); DF-26 IRBM; covers Taiwan and 2nd island chain"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [117.48, 23.69] },
+      "properties": {
+        "type": "PLARF", "name_en": "Dongshan Missile Unit", "name_zh": "东山岛导弹部队",
+        "unit": "PLARF / 东部战区联合作战", "dist_km": 170,
+        "notes": "Forward staging; used in 1996 missile crisis exercises; ~150km from SW Taiwan"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [118.07, 24.55] },
+      "properties": {
+        "type": "PLAGF", "name_en": "73rd Group Army (Xiamen)", "name_zh": "陆军第73集团军",
+        "unit": "中国人民解放军陆军第73集团军", "dist_km": 200,
+        "notes": "Primary amphibious army for Taiwan contingency; includes amphibious mechanized infantry and marine brigades"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [120.09, 30.89] },
+      "properties": {
+        "type": "PLAGF", "name_en": "72nd Group Army (Huzhou)", "name_zh": "陆军第72集团军",
+        "unit": "中国人民解放军陆军第72集团军", "dist_km": 680,
+        "notes": "Eastern flank operations; helicopter assault brigades; combined arms"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [117.23, 31.86] },
+      "properties": {
+        "type": "PLAGF", "name_en": "71st Group Army (Hefei)", "name_zh": "陆军第71集团军",
+        "unit": "中国人民解放军陆军第71集团军", "dist_km": 720,
+        "notes": "Rear echelon; armor and long-range artillery; surge capacity for Taiwan blockade scenario"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [118.79, 32.06] },
+      "properties": {
+        "type": "HQ", "name_en": "Eastern Theater Command HQ", "name_zh": "东部战区司令部",
+        "unit": "中国人民解放军东部战区", "dist_km": 820,
+        "notes": "Commands all PLAN/PLAAF/PLARF/PLAGF in a Taiwan contingency; established 2016 under CMC reform"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [119.78, 25.51] },
+      "properties": {
+        "type": "RADAR", "name_en": "Pingtan Island Radar Station", "name_zh": "平潭岛侦察站",
+        "unit": "解放军侦察/电子战部队", "dist_km": 130,
+        "notes": "Closest PLA land point to Taiwan (~130km); SIGINT/ELINT collection; OTH radar coverage"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [117.42, 23.71] },
+      "properties": {
+        "type": "RADAR", "name_en": "Dongshan EW Station", "name_zh": "东山岛电子战站",
+        "unit": "解放军电子战/侦察", "dist_km": 160,
+        "notes": "Electronic warfare; GPS jamming capability; surveillance of SW Taiwan strait air/sea"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [120.03, 26.90] },
+      "properties": {
+        "type": "RADAR", "name_en": "Xiapu Tracking Station", "name_zh": "霞浦卫星测控站",
+        "unit": "解放军航天系统部队", "dist_km": 380,
+        "notes": "Satellite telemetry; naval vessel uplink; ELINT collection of western Pacific"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [119.52, 25.96] },
+      "properties": {
+        "type": "PLAGF", "name_en": "Changle Amphibious Staging Base", "name_zh": "长乐两栖登陆基地",
+        "unit": "PLA Marine Corps / 东部战区", "dist_km": 265,
+        "notes": "Primary amphibious staging for eastern Taiwan contingency; LCU/hovercraft prepositioning observed 2021–2023; beach assault training exercises confirmed"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [119.51, 26.68] },
+      "properties": {
+        "type": "PLAN", "name_en": "Ningde Naval Station", "name_zh": "宁德海军站",
+        "unit": "PLAN 东海舰队", "dist_km": 340,
+        "notes": "Fast-attack craft and missile boats; surveillance of northern Taiwan Strait; expanded pier 2022; coordinates with Fuzhou naval air"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [117.62, 24.13] },
+      "properties": {
+        "type": "PLARF", "name_en": "Zhangpu Coastal Defense Regt", "name_zh": "漳浦海防导弹团",
+        "unit": "PLARF / 东部战区联合作战", "dist_km": 170,
+        "notes": "YJ-12 anti-ship and DH-10 land-attack cruise missiles; ~170km from SW Taiwan; forward firing position confirmed via satellite 2023"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [119.38, 25.73] },
+      "properties": {
+        "type": "RADAR", "name_en": "Fuqing ISR/SIGINT Station", "name_zh": "福清情报侦察站",
+        "unit": "战略支援部队 / 网络系统部", "dist_km": 290,
+        "notes": "Electronic intelligence and signals intercept; Taiwan Strait air/sea monitoring; space tracking relay; uplink node for PLAN submarines"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [114.60, 23.05] },
+      "properties": {
+        "type": "PLAAF", "name_en": "Huizhou Air Base", "name_zh": "惠州机场",
+        "unit": "PLAAF 南部战区", "dist_km": 500,
+        "notes": "J-11B/J-16 southern approach vector; expanded ramp capacity 2022; enables strike on western Taiwan from southern axis bypassing ADIZ"
+      }
+    },
+    {
+      "type": "Feature",
+      "geometry": { "type": "Point", "coordinates": [112.35, 16.83] },
+      "properties": {
+        "type": "HQ", "name_en": "Sansha Garrison (Woody Island)", "name_zh": "三沙永兴岛驻军",
+        "unit": "南部战区海军陆战队", "dist_km": 1200,
+        "notes": "South China Sea strategic anchor; HQ-9B SAM and YJ-12B AShM deployed; J-11/H-6J capable runway; threatens SE Taiwan approaches and US carrier access"
+      }
+    }
+  ]
+}

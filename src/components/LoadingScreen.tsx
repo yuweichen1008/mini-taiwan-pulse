@@ -7,8 +7,10 @@ interface LoadingStep {
 }
 
 interface LoadingScreenProps {
-  steps: LoadingStep[];
+  steps?: LoadingStep[];
 }
+
+const EMPTY_STEPS: LoadingStep[] = [];
 
 /* ── category colors ── */
 type Cat = "flight" | "ship" | "rail" | "weather" | "system";
@@ -32,7 +34,8 @@ function stepToCat(label: string): Cat {
 
 const VISIBLE_LINES = 10;
 
-export function LoadingScreen({ steps }: LoadingScreenProps) {
+export function LoadingScreen({ steps: stepsRaw }: LoadingScreenProps) {
+  const steps = stepsRaw ?? EMPTY_STEPS;
   const allDone = steps.every((s) => s.done);
   const [lines, setLines] = useState<{ id: number; cat: Cat; text: string }[]>([]);
   const lineIdRef = useRef(0);

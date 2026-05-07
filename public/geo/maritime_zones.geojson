@@ -1,0 +1,83 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "zone_type": "territorial",
+        "name": "Taiwan Territorial Waters (12nm)",
+        "name_zh": "中華民國領海（12海里）"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [118.5, 21.5], [118.5, 26.5], [123.0, 26.5],
+          [123.5, 25.0], [123.5, 22.5], [121.5, 21.0],
+          [120.0, 21.0], [118.5, 21.5]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "zone_type": "contiguous",
+        "name": "Taiwan Contiguous Zone (24nm)",
+        "name_zh": "鄰接區（24海里）"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [117.8, 21.0], [117.5, 27.0], [124.0, 27.2],
+          [124.5, 25.5], [124.5, 22.0], [122.5, 20.5],
+          [120.0, 20.2], [117.8, 21.0]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "zone_type": "eez",
+        "name": "Taiwan EEZ (200nm claim)",
+        "name_zh": "中華民國專屬經濟區（200海里主張）"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [114.0, 18.0], [114.0, 29.0], [126.0, 29.0],
+          [128.0, 26.0], [128.0, 22.0], [124.0, 18.5],
+          [120.0, 17.5], [114.0, 18.0]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "zone_type": "territorial",
+        "name": "Penghu Territorial Waters",
+        "name_zh": "澎湖列島領海"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [118.8, 23.1], [118.8, 23.9], [119.9, 23.9],
+          [119.9, 23.1], [118.8, 23.1]
+        ]]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "zone_type": "territorial",
+        "name": "Kinmen & Matsu Territorial Waters",
+        "name_zh": "金門、馬祖領海"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [[
+          [118.1, 24.3], [118.1, 26.4], [120.0, 26.4],
+          [120.0, 24.3], [118.1, 24.3]
+        ]]
+      }
+    }
+  ]
+}

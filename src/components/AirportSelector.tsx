@@ -9,8 +9,8 @@ interface Props {
 }
 
 const overviewPresets = ALL_PRESETS.filter((p) => p.category === "overview");
-const cityPresets = ALL_PRESETS.filter((p) => p.category === "city");
-const airportPresets = ALL_PRESETS.filter((p) => p.category === "airport");
+const cityPresets = ALL_PRESETS.filter((p) => p.category === "port");
+const airportPresets = ALL_PRESETS.filter((p) => p.category === "scene");
 
 export function LocationJump({ isDarkTheme = true, onJump, currentId }: Props) {
   const [open, setOpen] = useState(false);
